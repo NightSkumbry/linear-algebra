@@ -3,7 +3,6 @@ from .DiafantExpression import DiafantExpression
 from .EuclidianAlgorythm import EuclidianAlgorythm
 from typing import Self
 from .Print import Print, CheckFlag
-# TODO: add +4 flags to masks
 
 
 class Comparison:
