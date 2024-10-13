@@ -13,7 +13,26 @@ class Comparison:
         self._VAR = var
     
     def __str__(self) -> str:
-        return f'{self._A if self._A != 1 else ""}{self._VAR} ≡ {self._B} (mod {self._MOD})'
+        return f'{str(self._A) + "•" if self._A != 1 else ""}{self._VAR} ≡ {self._B} (mod {self._MOD})'
+    
+    
+    def get_MOD(self) -> int:
+        return self._MOD
+    
+    def get_A(self) -> int:
+        return self._A
+    
+    def get_B(self) -> int:
+        return self._B
+    
+    def get_VAR(self) -> str:
+        return self._VAR
+    
+    def set_VAR(self, var:str) -> None:
+        self._VAR = var
+    
+    def is_normalised(self) -> bool:
+        return not (self._A >= self._MOD or self._A < 0 or self._B >= self._MOD or self._B < 0)
     
     
     def to_Deduction(self, explain:int = 0, var:str = 't') -> Deduction | None:
@@ -32,7 +51,7 @@ class Comparison:
         explain_new = explain - (2 if CheckFlag(2, explain) else 0)
         
         Print(1 +16, explain, f'Решение сравнения  {self}:')
-        if self._A >= self._MOD or self._A < 0 or self._B >= self._MOD or self._B < 0:
+        if not self.is_normalised():
             Print(1, explain, '\nНормализуем сравнение, т. е. сделаем A, B ∈ [0, C);')
             self.normalise(explain_new)
         Print(1, explain)
@@ -45,7 +64,7 @@ class Comparison:
             Print(2, explain, 'Ответ: Решений в ℤ нет.')
             return
         x = sol[0]
-        Print(1, explain, f'Нас интересует только {self._VAR}. Запишем его в виде x = A + B•{var}, {var} ∈ ℤ, где 0 <= A < B .\n')
+        Print(1, explain, f'Нас интересует только {self._VAR}. Запишем его в виде {self._VAR} = A + B•{var}, {var} ∈ ℤ, где 0 <= A < B .\n')
         x.normalise()
         Print(2, explain, f'Ответ: ', end='')
         Print(3, explain, f'{x.express(var, with_z=False)}' + (f' (mod {self._MOD})' if not CheckFlag(16, explain) else '') + f', {var} ∈ ℤ')
