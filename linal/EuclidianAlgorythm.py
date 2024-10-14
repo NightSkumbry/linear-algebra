@@ -51,19 +51,4 @@ class EuclidianAlgorythm:
         Print(3, explain, s)
         return kp, kn
     
-    # def _get_gcd_explanation(self) -> str:
-    #     return ';\n'.join([f'{self._key_nums[i]} = {self._step_nums[i]}•{self._key_nums[i+1]}{" + " + str(self._key_nums[i+2]) if self._key_nums[i+2] != 0 else ""}' for i in range(len(self._step_nums))]) + '.'
-
-    # def get_linear_gcd_form(self, explain:bool = False) -> tuple[int, int]:
-    #     kp = 1
-    #     kn = self._step_nums[-2] if len(self._step_nums) >= 2 else 0
-    #     for i in range(3, len(self._step_nums)+1):
-    #         if i%2:
-    #             kp += kn * self._step_nums[-i]
-    #         else:
-    #             kn += kp * self._step_nums[-i]
-    #     kn = -kn
-        
-    #     if self._swapped ^ len(self._step_nums)%2: kn, kp = kp, kn
-    #     return kp, kn
     

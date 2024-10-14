@@ -18,11 +18,14 @@ class Deduction:
     def get_A(self) -> int:
         return self._A
     
+    def set_VAR(self, var:str) -> None:
+        self._VAR = var
+    
     
     def express(self, var: str, *, with_z: bool = True, with_eq: bool = True) -> str:
         return f'{self._VAR + " = " if with_eq else ""}{self._A} {"+" if self._MOD >= 0 else "-"} {abs(self._MOD)}•{var}{", " + var + " ∈ ℤ" if with_z else ""}'
     
-    def reverse(self, explain:int = 0): # -> Self | None
+    def reverse(self, explain:int = 0) -> Self | None:
         from .Comparison import Comparison
         explain_new = explain - (2 if bin(explain)[2:].zfill(2)[-2] == '1' else 0)
         
@@ -33,7 +36,7 @@ class Deduction:
         if d is not None:
             Print(2, explain, f'\nОтвет: ', end='')
             Print(3, explain, d)
-            return d
+            return d # type: ignore
         Print(2, explain, f'Ответ: ', end='')
         Print(3, explain, f'Обратного вычета не существует')
         return

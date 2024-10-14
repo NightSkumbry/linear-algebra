@@ -33,7 +33,7 @@ class ComparisonSystem:
         explain_new = explain - (2 if CheckFlag(2, explain) else 0)
         
         if not self.is_normalised():
-            Print(1, explain, '\nНормализуем сравнения, где это нужно:\n')
+            Print(1, explain, 'Нормализуем сравнения, где это нужно:\n')
             self.normalise()
             Print(1, explain, self, '\n')
         if any([i.get_A() != 1 for i in self._Comparisons]):
@@ -65,12 +65,14 @@ class ComparisonSystem:
             alg = int(input('--> '))
             if alg not in [1,2]:
                 raise ValueError(f'Wrong algorythm.')
+        else:
+            alg = 1
         
-        Print(1, explain, f'\nРешить систему сравнений:\n\n{self}')
+        Print(1, explain, f'\nРешить систему сравнений:\n\n{self}\n')
         wdn = self.is_normalised()
         ds = self.to_deduction_system(explain_new)
         if any([i.get_A() != 1 for i in self._Comparisons]) or not wdn:
-            Print(1, explain, 'Промежуточный итог:\n\n', ds, '\n', sep='')
+            Print(1, explain, '\nПромежуточный итог:\n\n', ds, '\n', sep='')
         del wdn
         if ds is None:
             Print(2, explain, 'Ответ: ', end='')
@@ -83,7 +85,7 @@ class ComparisonSystem:
         if alg == 1:
             ds.solve_KTO_1(explain_new +2)
         elif alg == 2:
-            ds.solve_KTO_2(explain_new)
+            ds.solve_KTO_2(explain_new +2)
         
 
 

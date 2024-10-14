@@ -29,7 +29,7 @@ class DeductionSystem:
         return math.lcm(*map(lambda t: t.get_MOD(),  self._Deductions)) == reduce(lambda x, y: x*y, map(lambda t: t.get_MOD(),  self._Deductions))
     
 
-    def solve_KTO_1(self, explain:int = 0) -> Deduction | None:
+    def solve_KTO_1(self, explain:int = 0) -> Deduction:
         explain_new = explain - (2 if CheckFlag(2, explain) else 0)
         
         M = reduce(lambda x,y: x*y, map(lambda t: t.get_MOD(),  self._Deductions))
@@ -55,13 +55,37 @@ class DeductionSystem:
         Print(1, explain, f'x ≡ x0 ≡ {x0} (mod {M})\n')
         ans = Deduction(x0, M, self._VAR)
         ans.normalise()
+        
         Print(2, explain, f'Ответ: ', end='')
         Print(3, explain, ans)
         return ans
     
-    def solve_KTO_2(self, explain:int = 0) -> Deduction | None:
+    def solve_KTO_2(self, explain:int = 0) -> Deduction:
         explain_new = explain - (2 if CheckFlag(2, explain) else 0)
-        ...
+        
+        Expression = self._Deductions[0].express(f'{self._VAR}1', with_z=False)
+        prev_ex: Deduction = self._Deductions[0]
+        Print(1, explain, f'Алгоритм заключается в последовательном расписывании значения {self._VAR}, добавляя условия всё большего количества сравнений.\n\n\n#1  {self._Deductions[0]}\n\n  {Expression}.')
+        for i, e in enumerate(self._Deductions[1:], 2):
+            Print(1, explain, f'\n\n#{i}  {e}\n\n{prev_ex.express(f"{self._VAR}{i-1}", with_eq=False, with_z=False)} ≡ {e.get_A()} (mod {e.get_MOD()})')
+            com = Comparison(prev_ex.get_MOD(), e.get_A() - prev_ex.get_A(), e.get_MOD(), f'{self._VAR}{i-1}')
+            Print(1, explain, com)
+            if not com.is_normalised():
+                com.normalise()
+                Print(1, explain, com)
+            ded: Deduction = com.to_Deduction() # type: ignore
+            Print(1, explain, ded)
+            Print(1, explain, ded.express(f'{self._VAR}{i}', with_z=False))
+            Expression += ' = ' + prev_ex.express(f"({ded.express(f'{self._VAR}{i}', with_z=False, with_eq=False)})", with_z=False, with_eq=False)
+            prev_ex = Deduction(prev_ex.get_A() + (prev_ex.get_MOD() * ded.get_A()), prev_ex.get_MOD() * ded.get_MOD(), f'{self._VAR}{i-1}')
+            Expression += ' = ' + prev_ex.express(f'{self._VAR}{i}', with_eq=False, with_z=False)
+            Print(1, explain, f'\n  {Expression}')
+        prev_ex.set_VAR(self._VAR)
+        
+        Print(2, explain, f'\n\nОтвет: ', end='')
+        Print(3, explain, prev_ex)
+        return prev_ex
+        
     
     def normalise(self) -> None:
         for i in self._Deductions:
